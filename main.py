@@ -64,14 +64,6 @@ def updateData(data, n, space=16):
         for j in range(n):
             im = ImageGrab.grab([x+i*space, y+j*space, x+(i+1)*space, y+(j+1)*space])
         #    im.show()
-
-
-
-            if isEqual(im, unknownfilename):
-                data[i][j]=UNKNOWN
-                continue
-
-
             if isEqualOneOf(im, minefilenameList):
                 exit()
             if isEqual(im, safefilename):
