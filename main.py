@@ -35,8 +35,6 @@ unknownfilename="img/unknown.PNG"
 minefilenameList=["img/mine1.PNG",
                   "img/mine2.PNG"]
 
-
-
 def showData(data, n):
     for i in range(n):
         for j in range(n):
@@ -59,7 +57,27 @@ def isEqualOneOf(im, imlist):
     return False
 
 
-def updateData(data, n, space=16):
+def updateData(posX, posY, data, n, space=16):
+    for i in range(n):
+        for j in range(n):
+            im = ImageGrab.grab([posX+i*space, posY+j*space, posX+(i+1)*space, posY+(j+1)*space])
+        #    im.show()
+            if isEqualOneOf(im, minefilenameList):
+                exit()
+            if isEqual(im, safefilename):
+                data[i][j] = SAFE
+                continue
+            if isEqual(im, flagfilename):
+                data[i][j] = FLAG
+                continue
+            if isEqual(im, unknownfilename):
+                data[i][j] = UNKNOWN
+                continue
+            for k in range(1,9):
+                if isEqual(im, "img/"+str(k)+".PNG"):
+                    data[i][j] = k
+
+def updateData(x, y, data, n, space=16):
     for i in range(n):
         for j in range(n):
             im = ImageGrab.grab([x+i*space, y+j*space, x+(i+1)*space, y+(j+1)*space])
@@ -67,13 +85,13 @@ def updateData(data, n, space=16):
             if isEqualOneOf(im, minefilenameList):
                 exit()
             if isEqual(im, safefilename):
-                data[i][j]=SAFE
+                data[i][j] = SAFE
                 continue
             if isEqual(im, flagfilename):
-                data[i][j]=FLAG
+                data[i][j] = FLAG
                 continue
             if isEqual(im, unknownfilename):
-                data[i][j]=UNKNOWN
+                data[i][j] = UNKNOWN
                 continue
             for k in range(1,9):
                 if isEqual(im, "img/"+str(k)+".PNG"):
@@ -81,16 +99,15 @@ def updateData(data, n, space=16):
 
 
 if __name__ == '__main__':
-    x, y, x_end, y_end = getScreenshot.getPos()
-    n = (x_end-x)/16
+    posX, posY, posX_end, posY_end = getScreenshot.getPos()
+    n = (posX_end-posX)/16
     data = [[UNKNOWN for i in range(n)] for i in range(n)]
     pMine = [[50 for i in range(n)] for i in range(n)]
     hasEnd = False
-    mouseclick.clickLeft(x, y, random.randint(0,n-1), random.randint(0,n-1))
+    mouseclick.clickLeft(posX, posY, random.randint(0, n-1), random.randint(0, n-1))
     while not hasEnd:
-        updateData(data, n)
+        updateData(posX, posY, data, n)
         showData(data, n)
-        mouseclick.clickLeft(x, y, random.randint(0, n-1), random.randint(0, n-1))
+        mouseclick.clickLeft(posX, posY, random.randint(0, n-1), random.randint(0, n-1))
 
-
-    mouseclick.clickLeft(x, y, 5, 6)
+    mouseclick.clickLeft(posX, posY, 5, 6)
