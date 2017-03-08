@@ -14,10 +14,10 @@ import random
 5 点击
 '''
 
-UNKNOWN = 0
-MINE    = -2
-SAFE    = -1
-FLAG    = -3
+UNKNOWN = -1
+MINE = -2
+SAFE = 0
+FLAG = -3
 
 filenameList=["img/1.PNG",
               "img/2.PNG",
@@ -42,7 +42,7 @@ def showData(data, n):
         for j in range(n):
             print data[j][i],
         print "\n"
-    print "------------"
+    print "-----------------"
 
 def isEqual(im1, filepath):
     im2 = Image.open(filepath)
@@ -83,7 +83,7 @@ def updateData(data, n, space=16):
 if __name__ == '__main__':
     x, y, x_end, y_end = getScreenshot.getPos()
     n = (x_end-x)/16
-    data = [[-10 for i in range(n)] for i in range(n)]
+    data = [[UNKNOWN for i in range(n)] for i in range(n)]
     pMine = [[50 for i in range(n)] for i in range(n)]
     hasEnd = False
     mouseclick.clickLeft(x, y, random.randint(0,n-1), random.randint(0,n-1))
