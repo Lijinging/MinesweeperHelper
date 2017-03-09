@@ -6,7 +6,7 @@ MINE = -2
 SAFE = 0
 FLAG = -3
 
-pyautogui.PAUSE = 0.01
+pyautogui.PAUSE = 0.001
 
 def clickLeft(posX, posY, row, col, space=16):
     pyautogui.click(posX+(row+0.5)*space, posY+(col+0.5)*space)

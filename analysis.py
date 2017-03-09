@@ -66,9 +66,9 @@ def updateData(posX, posY, posX_end, posY_end, data, n, space=16):
 def showData(data, n):
     for i in range(n):
         for j in range(n):
-            print data[j][i],
-        print "\n"
-    print "-----------------"
+            print "%3d" % data[j][i],
+        print
+    print "----------------------------------"
 
 def isEqual(im1, filepath):
     im2 = Image.open(filepath)
