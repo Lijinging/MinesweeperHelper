@@ -2,7 +2,6 @@
 import getScreenshot
 import mouseclick
 import analysis
-
 import random
 
 '''
@@ -26,7 +25,7 @@ if __name__ == '__main__':
     hasEnd = False
     mouseclick.clickLeft(posX, posY, random.randint(0, n-1), random.randint(0, n-1))
     while not hasEnd:
-        analysis.updateData(posX, posY, data, n)
+        analysis.updateData(posX, posY, posX_end, posY_end, data, n)
         analysis.showData(data, n)
         mouseclick.clickLeft(posX, posY, random.randint(0, n-1), random.randint(0, n-1))
 

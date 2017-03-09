@@ -32,6 +32,37 @@ unknownfilename="img/unknown.PNG"
 minefilenameList=["img/mine1.PNG",
                   "img/mine2.PNG"]
 
+pointList=[(11,11),(1,1),(3,3)]
+
+dict={}
+dict["0000ffc0c0c0c0c0c0"]=1
+dict["008000c0c0c0c0c0c0"]=2
+dict["ff0000c0c0c0ff0000"]=3
+dict["000080c0c0c0c0c0c0"]=4
+dict["800000c0c0c0800000"]=5
+dict["008080c0c0c0c0c0c0"]=6
+dict["c0c0c0c0c0c0000000"]=7
+dict["808080c0c0c0c0c0c0"]=8
+dict["000000ffffffc0c0c0"]=FLAG
+dict["c0c0c0c0c0c0c0c0c0"]=SAFE
+dict["c0c0c0ffffffc0c0c0"]=UNKNOWN
+dict["000000c0c0c0c0c0c0"]=MINE
+dict["000000ff0000ff0000"]=MINE
+
+myhex = lambda x: '%02x%02x%02x'% x
+
+def updateData(posX, posY, posX_end, posY_end, data, n, space=16):
+    im = ImageGrab.grab([posX, posY, posX_end, posY_end])
+    for i in range(n):
+        for j in range(n):
+
+            pix = im.load()
+
+            colorcode = myhex(pix[(i*space+pointList[0][0], j*space+pointList[0][1])])+\
+                        myhex(pix[(i*space+pointList[1][0], j*space+pointList[1][1])])+\
+                        myhex(pix[(i*space+pointList[2][0], j*space+pointList[2][1])])
+            data[i][j]=dict[colorcode]
+
 def showData(data, n):
     for i in range(n):
         for j in range(n):
@@ -52,27 +83,6 @@ def isEqualOneOf(im, imlist):
         if isEqual(im, im2):
             return True
     return False
-
-
-def updateData(posX, posY, data, n, space=16):
-    for i in range(n):
-        for j in range(n):
-            im = ImageGrab.grab([posX+i*space, posY+j*space, posX+(i+1)*space, posY+(j+1)*space])
-        #    im.show()
-            if isEqualOneOf(im, minefilenameList):
-                exit()
-            if isEqual(im, safefilename):
-                data[i][j] = SAFE
-                continue
-            if isEqual(im, flagfilename):
-                data[i][j] = FLAG
-                continue
-            if isEqual(im, unknownfilename):
-                data[i][j] = UNKNOWN
-                continue
-            for k in range(1,9):
-                if isEqual(im, "img/"+str(k)+".PNG"):
-                    data[i][j] = k
 
 def getNumOfUnAndFLag(data, pMine, x, y, n):
     cnt = 0
