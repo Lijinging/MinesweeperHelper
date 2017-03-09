@@ -31,3 +31,7 @@ def click(data, posX, posY, x, y, space=16):
         return
     clickLeft()
 
+
+
+
+
