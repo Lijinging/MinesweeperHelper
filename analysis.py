@@ -59,7 +59,6 @@ def updateData(posX, posY, posX_end, posY_end, data, size, space=16):
     im = ImageGrab.grab([posX, posY, posX_end, posY_end])
     for i in range(size[0]):
         for j in range(size[1]):
-
             pix = im.load()
 
             colorcode = myhex(pix[(i*space+pointList[0][0], j*space+pointList[0][1])])+\
@@ -132,6 +131,7 @@ def analysisOpen(data, unandflag, size, posX, posY):
             if getNumOfFlag(data, i, j, size) == data[i][j] and unandflag[i][j]!=data[i][j]:
                 openAround(data, posX, posY, i, j, size, unandflag)
 
+
 def showdetail():
     print openList
 
@@ -158,9 +158,6 @@ def nextclick(data, unandflag, size, posX, posY, posX_end, posY_end):
     showdetail()
  #   raw_input()
 
-
-
-   # opennext(data, unandflag, size, posX, posY)
 
 
 

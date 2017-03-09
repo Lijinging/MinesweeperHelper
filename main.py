@@ -20,9 +20,9 @@ FLAG = -3
 if __name__ == '__main__':
     posX, posY, posX_end, posY_end = getScreenshot.getPos()
     size = [(posX_end-posX)/16, (posY_end-posY)/16]
-    data = [[UNKNOWN for i in range(size[0])] for i in range(size[1])]
-    unandflag = [[9 for i in range(size[0])] for i in range(size[1])]
-    pMine = [[50 for i in range(size[0])] for i in range(size[1])]
+    data = [[UNKNOWN for i in range(size[1])] for j in range(size[0])]
+    unandflag = [[9 for i in range(size[1])] for j in range(size[0])]
+    pMine = [[50 for i in range(size[1])] for j in range(size[0])]
     hasEnd = False
 
     while not hasEnd:
@@ -36,8 +36,8 @@ if __name__ == '__main__':
         analysis.updateData(posX, posY, posX_end, posY_end, data, size)
         analysis.updateunandflag(data, unandflag, size)
 
-        analysis.showData(data, size)
-        analysis.showData(unandflag, size)
+        #analysis.showData(data, size)
+        #analysis.showData(unandflag, size)
         analysis.nextclick(data, unandflag, size, posX, posY, posX_end, posY_end)
     #    mouseclick.clickLeft(posX, posY, random.randint(0, size[0]-1), random.randint(0, size[1]-1))
      #   raw_input()
