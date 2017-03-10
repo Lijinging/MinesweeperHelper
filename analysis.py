@@ -35,6 +35,7 @@ minefilenameList=["img/mine1.PNG",
                   "img/mine2.PNG"]
 
 pointList=[(11,11),(1,1),(3,3)]
+special = [UNKNOWN, FLAG, SAFE, MINE]
 
 openList=[]
 
@@ -66,6 +67,7 @@ def updateData(posX, posY, posX_end, posY_end, data, size, space=16):
                         myhex(pix[(i*space+pointList[2][0], j*space+pointList[2][1])])
             data[i][j]=dict[colorcode]
             if data[i][j]==MINE:
+                print "False"
                 exit()
 
 def updateunandflag(data, unandflag, size):
@@ -81,12 +83,12 @@ def showData(data, size):
     print "----------------------------------"
 
 
-def getAround(data, x, y, size):
+def getAround(x, y, size):
     return [(i, j) for i in xrange(x-1, x+2) for j in xrange(y-1, y+2) if \
              i >= 0 and i <size[0] and j >= 0 and j < size[1]]
 
 def getNumOfUnAndFLag(data, x, y, size):
-    slist = getAround(data, x, y, size)
+    slist = getAround(x, y, size)
     cnt = 0
     for it in slist:
         if data[it[0]][it[1]]==UNKNOWN or data[it[0]][it[1]]==FLAG:
@@ -94,7 +96,7 @@ def getNumOfUnAndFLag(data, x, y, size):
     return cnt
 
 def getNumOfFlag(data, x, y, size):
-    slist = getAround(data, x, y, size)
+    slist = getAround(x, y, size)
     cnt = 0
     for it in slist:
         if data[it[0]][it[1]]==FLAG:
@@ -102,19 +104,19 @@ def getNumOfFlag(data, x, y, size):
     return cnt
 
 def flagAround(data, posX, posY, x, y, size, space=16): #对x y周围所有未点开区域标记
-    slist = getAround(data, x, y, size)
+    slist = getAround(x, y, size)
     for it in slist:
         if data[it[0]][it[1]] == UNKNOWN and data[it[0]][it[1]] != FLAG:
             data[it[0]][it[1]] = FLAG
             mouseclick.clickRight(posX, posY, it[0], it[1])
-            print "flag:", (y, x), (it[1], it[0])
+         #   print "flag:", (y, x), (it[1], it[0])
 
 def openAround(data, posX, posY, x, y, size, unandflag,space=16): #对x y周围所有未点开区域标记
-    slist = getAround(data, x, y, size)
+    slist = getAround(x, y, size)
     for it in slist:
         if data[it[0]][it[1]] == UNKNOWN:
             openList.append(it)
-            print it, "-->openlist"
+          #  print it, "-->openlist"
 
 
 
@@ -135,6 +137,49 @@ def analysisOpen(data, unandflag, size, posX, posY):
 def showdetail():
     print openList
 
+def openrandom(data, size):
+    x = random.randint(0, size[0] - 1)
+    y = random.randint(0, size[1] - 1)
+    while data[x][y] != UNKNOWN:
+        hasEnd = True
+        for i in range(size[0]):
+            for j in range(size[1]):
+                if data[i][j] == UNKNOWN:
+                    hasEnd = False
+        if hasEnd:
+            print "Finish"
+            exit(0)
+        x = random.randint(0, size[0] - 1)
+        y = random.randint(0, size[1] - 1)
+    print "Random:", (x, y)
+    return [x, y]
+
+
+def speculate(data, size):
+    minest = [[0 for i in range(size[1])] for j in range(size[0])]
+    maxofmin = 10
+    maxlabel = []
+    for i in range(size[0]):
+        for j in range(size[1]):
+            if data[i][j] not in special:
+                slist = getAround(i, j, size)
+                for it in slist:
+                    if data[it[0]][it[1]] == UNKNOWN:
+                        if minest[it[0]][it[1]] == 0:
+                            minest[it[0]][it[1]] = len(slist)
+                        else:
+                            minest[it[0]][it[1]] = min(data[i][j]-getNumOfFlag(data, i, j, size), minest[it[0]][it[1]])
+                            if minest[it[0]][it[1]] < maxofmin:
+                                maxofmin = minest[it[0]][it[1]]
+                                maxlabel = it
+    #minest中数据越小，越危险
+    if maxofmin > 9:
+        return openrandom(data, size)
+    print "speculate:", maxlabel
+    showData(minest, size)
+    return maxlabel
+
+
 
 def nextclick(data, unandflag, size, posX, posY, posX_end, posY_end):
     flagnext(data, unandflag, size, posX, posY)
@@ -142,13 +187,14 @@ def nextclick(data, unandflag, size, posX, posY, posX_end, posY_end):
     while len(openList)>0:
         it = openList.pop(0)
         while data[it[0]][it[1]]!=UNKNOWN:
+        #    print "open:",it, " has opened"
             if(len(openList)>0):
                 it = openList.pop(0)
             else:
                 showdetail()
               #  raw_input()
                 return
-        print "open:",it
+        #print "open:",it
         data[it[0]][it[1]] = SAFE
         mouseclick.clickLeft(posX, posY, it[0], it[1])
         updateData(posX, posY, posX_end, posY_end, data, size)

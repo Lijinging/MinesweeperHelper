@@ -26,13 +26,9 @@ if __name__ == '__main__':
     hasEnd = False
 
     while not hasEnd:
-        x = random.randint(0, size[0] - 1)
-        y = random.randint(0, size[1] - 1)
-        while data[x][y]!=UNKNOWN:
-            x = random.randint(0, size[0] - 1)
-            y = random.randint(0, size[1] - 1)
-        print "Random:",(x,y)
-        mouseclick.clickLeft(posX, posY, x, y)
+
+        it = analysis.speculate(data, size)
+        mouseclick.clickLeft(posX, posY, it[0], it[1])
         analysis.updateData(posX, posY, posX_end, posY_end, data, size)
         analysis.updateunandflag(data, unandflag, size)
 
