@@ -28,6 +28,7 @@ if __name__ == '__main__':
     while not hasEnd:
 
         it = analysis.speculate(data, size)
+        #it = analysis.openrandom(data, size)
         mouseclick.clickLeft(posX, posY, it[0], it[1])
         analysis.updateData(posX, posY, posX_end, posY_end, data, size)
         analysis.updateunandflag(data, unandflag, size)

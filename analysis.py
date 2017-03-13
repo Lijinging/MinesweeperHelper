@@ -60,15 +60,16 @@ def updateData(posX, posY, posX_end, posY_end, data, size, space=16):
     im = ImageGrab.grab([posX, posY, posX_end, posY_end])
     for i in range(size[0]):
         for j in range(size[1]):
-            pix = im.load()
+            if data[i][j] == UNKNOWN:
+                pix = im.load()
 
-            colorcode = myhex(pix[(i*space+pointList[0][0], j*space+pointList[0][1])])+\
-                        myhex(pix[(i*space+pointList[1][0], j*space+pointList[1][1])])+\
-                        myhex(pix[(i*space+pointList[2][0], j*space+pointList[2][1])])
-            data[i][j]=dict[colorcode]
-            if data[i][j]==MINE:
-                print "False"
-                exit()
+                colorcode = myhex(pix[(i*space+pointList[0][0], j*space+pointList[0][1])])+\
+                            myhex(pix[(i*space+pointList[1][0], j*space+pointList[1][1])])+\
+                            myhex(pix[(i*space+pointList[2][0], j*space+pointList[2][1])])
+                data[i][j]=dict[colorcode]
+                if data[i][j]==MINE:
+                    print "False"
+                    exit()
 
 def updateunandflag(data, unandflag, size):
     for i in range(size[0]):
@@ -176,7 +177,7 @@ def speculate(data, size):
     if maxofmin > 9:
         return openrandom(data, size)
     print "speculate:", maxlabel
-    showData(minest, size)
+ #   showData(minest, size)
     return maxlabel
 
 
